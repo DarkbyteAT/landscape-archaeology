@@ -5,5 +5,8 @@
     "typeCheckingMode": "strict",
     "reportMissingImports": false,
     "reportUnknownParameterType": false,
-    "reportUnknownVariableType": false
+    "reportUnknownVariableType": false,
+    "reportUnknownMemberType": false,
+    "reportUnknownArgumentType": false,
+    "reportUnknownLambdaType": false
 }
