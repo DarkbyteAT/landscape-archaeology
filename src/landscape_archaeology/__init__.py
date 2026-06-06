@@ -11,12 +11,8 @@ returns NotImplementedError. The first real diagnostic lands as the Trello
 board's first Doing card.
 """
 
-from __future__ import annotations
+from collections.abc import Callable
 
-from typing import Callable
-
-import jax
-import jax.numpy as jnp
 from jaxtyping import Array, Float, PyTree
 
 
@@ -26,7 +22,7 @@ def hessian_topk(
     *,
     k: int = 10,
     num_iterations: int = 50,
-) -> Float[Array, "k"]:
+) -> Float[Array, " k"]:
     """Top-k Hessian eigenvalues of `loss_fn` at `params`, via HVP power iteration.
 
     Args:
