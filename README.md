@@ -1,21 +1,33 @@
 # landscape-archaeology
 
-A JAX library for diagnosing the geometry of a scalar loss surface at a point. Given a loss `L(params)` and a point in parameter space, `landscape-archaeology` answers — what does the curvature look like, how sharp is the minimum, and how far can you perturb before accuracy collapses?
+A JAX library for measuring the singular spectrum of an operator at a point — without ever materialising the operator's Jacobian.
 
-Everything happens through Hessian-vector-products: no `N × N` Hessian is ever materialised. The library is loss-agnostic — it expects a pure function `params → scalar` and a point; it returns diagnostics. Loss surfaces produced by [`loom`](https://github.com/DarkbyteAT/loom) reparameterisations of [`ondes`](https://github.com/DarkbyteAT/ondes)-rendered weights are the canonical instantiation, but anything `Callable[[PyTree], Float[Array, ""]]` is a valid target.
+One verb, two canonical bindings:
 
-See [`docs/PHILOSOPHY.md`](docs/PHILOSOPHY.md) for the API stance.
+- **Jacobian of a reparameterisation** — bind `operator = render_fn` to ask what geometric structure a basis `G` and projection `P` contribute to the implicit gradient on modulation parameters. Does the reparameterisation do more than relabel identity?
+- **Hessian of a scalar loss** — bind `operator = jax.grad(loss_fn)` to ask what the loss landscape looks like at this point. The Jacobian of the gradient is the Hessian; its spectrum is curvature.
+
+The library is operator-agnostic. It accepts any pure function `PyTree → PyTree`, a point in its domain, and returns spectral diagnostics. Reparameterisations produced by [`loom`](https://github.com/DarkbyteAT/loom) composed through [`ondes`](https://github.com/DarkbyteAT/ondes) bases are the canonical Jacobian instantiation; scalar losses of any shape are the canonical Hessian instantiation; anything else satisfying the type also works.
+
+See [`docs/PHILOSOPHY.md`](docs/PHILOSOPHY.md) for the design stance.
 
 ## What it looks like
 
 ```python
+import jax
 import landscape_archaeology as la
 
-# loss_fn is any pure function from params to a scalar loss.
-def loss_fn(params):
+# Jacobian binding — what does the reparameterisation's geometry look like?
+def render_fn(params):  # PyTree -> PyTree
     ...
 
-spectrum = la.hessian_topk(loss_fn, params, k=10)
+jac_spectrum = la.singular_spectrum(render_fn, params, k=32)
+
+# Hessian binding — what does the loss landscape look like at this point?
+def loss_fn(params):  # PyTree -> Float[Array, ""]
+    ...
+
+hess_spectrum = la.singular_spectrum(jax.grad(loss_fn), params, k=32)
 ```
 
 ## Install

@@ -3,5 +3,7 @@
     "exclude": ["tests"],
     "pythonVersion": "3.11",
     "typeCheckingMode": "strict",
-    "reportMissingImports": false
+    "reportMissingImports": false,
+    "reportUnknownParameterType": false,
+    "reportUnknownVariableType": false
 }
