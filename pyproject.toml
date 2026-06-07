@@ -1,6 +1,6 @@
 [project]
 name = "landscape-archaeology"
-version = "0.0.0"
+version = "0.2.0"
 description = "JAX library for loss-landscape diagnostics: Hessian eigenspectrum, sharpness probes, curvature along directions"
 readme = "README.md"
 license = "MIT"
