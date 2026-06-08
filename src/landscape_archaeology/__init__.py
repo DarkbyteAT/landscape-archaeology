@@ -33,6 +33,13 @@ import jax.numpy as jnp
 from jax.flatten_util import ravel_pytree
 from jaxtyping import Array, Float, PyTree
 
+from landscape_archaeology.robustness import (
+    delta_from_curve,
+    perturbation_curve,
+    retraining_noise_floor,
+)
+from landscape_archaeology.spectral import ht_sr_alpha, radial_fft_alpha
+
 
 def singular_spectrum(
     operator: Callable[[PyTree], PyTree],
@@ -130,5 +137,12 @@ def singular_spectrum(
     return jnp.flip(jnp.sort(sigmas))
 
 
-__all__ = ["singular_spectrum"]
-__version__ = "0.1.0"
+__all__ = [
+    "delta_from_curve",
+    "ht_sr_alpha",
+    "perturbation_curve",
+    "radial_fft_alpha",
+    "retraining_noise_floor",
+    "singular_spectrum",
+]
+__version__ = "0.3.0"
